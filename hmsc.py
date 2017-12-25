@@ -4,6 +4,8 @@ import itertools
 import logging
 import sys
 
+from bm import BMSearch
+
 # Configurate logger
 root = logging.getLogger()
 root.setLevel(logging.DEBUG)
@@ -18,12 +20,18 @@ class Finder:
     def __init__(self, file_name, buffer_size=65536):
         self.file = io.open(file_name, "rb")
         self.buffer_size = buffer_size
-        
+        self.current_offset = 0
         self.file_size = os.path.getsize(file_name)
         self.offsets = []
 
-    def find_offsets(data):
-        pass
+    def find_riff_wave_offsets(self, data):
+      print(data.find(b"R"))
+      # print(BMSearch(data, 0x52))
+      return []
+
+    def find_offsets(self, data):
+      riff_wave_offsets = self.find_riff_wave_offsets(data)
+      self.offsets = sum([self.offsets, riff_wave_offsets])
 
     def run(self):
       logging.debug("Running file scanner...")
@@ -39,7 +47,12 @@ class Finder:
           self.buffer = bytearray(self.buffer_size)
 
         numread = self.file.readinto(self.buffer)
-        print(numread)
+        if numread == self.buffer_size:
+          self.current_offset = read_bytes
+          self.find_offsets(self.buffer)
+        else:
+          logger.error("Error reading from file")
+          break
 
         read_bytes += self.buffer_size
 
