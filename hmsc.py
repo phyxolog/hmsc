@@ -4,7 +4,7 @@ import itertools
 import logging
 import sys
 
-from bm import BMSearch
+from riff import RIFF
 
 # Configurate logger
 root = logging.getLogger()
@@ -16,40 +16,14 @@ formatter = logging.Formatter('%(asctime)s [%(levelname)s] --> %(message)s')
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
-class Finder:
+class HMSC:
   def __init__(self, file_name, buffer_size=65536):
     self.file = io.open(file_name, "rb")
     self.buffer_size = buffer_size
     self.current_offset = 0
     self.file_size = os.path.getsize(file_name)
     self.offsets = []
-
-  def find_riff_wave_offsets(self, data):
-    index = data.find(b"R")
-    buffer = bytearray(8)
-
-    while index != -1:
-      offset = self.current_offset + index
-      self.file.seek(offset)
-      self.file.readinto(buffer)
-      
-      if buffer[0] == 0x52 and buffer[1] == 0x49:
-        print("lek")
-      # if buffer[0] == b"R":
-      #   print('kek')
-      # print("".join(map(chr, buffer)))
-      # if buffer.find(b"I") != -1:
-      #   print(buffer)
-
-      index = data.find(b"R", index + 1)
-
-    self.file.seek(self.current_offset)
-
-    return []
-
-  def find_offsets(self, data):
-    riff_wave_offsets = self.find_riff_wave_offsets(data)
-    self.offsets = sum([self.offsets, riff_wave_offsets], [])
+    self.RIFF = RIFF(file=self.file)
 
   def run(self):
     logging.debug("Running file scanner...")
@@ -67,7 +41,7 @@ class Finder:
       numread = self.file.readinto(self.buffer)
       if numread == self.buffer_size:
         self.current_offset = read_bytes
-        self.find_offsets(self.buffer)
+        self.offsets += self.RIFF.scan(self.buffer, self.current_offset)
       else:
         logging.error("Error reading from file")
         break
@@ -82,5 +56,5 @@ class Finder:
 print("HMSC [Hyper Media Streams Compressor] v0.0.1 pre-alpha")
 print("by phyxolog (https://github.com/phyxolog)\n")
 
-finder = Finder(file_name="music.data")
-finder.run()
+hmsc = HMSC(file_name="music.data")
+hmsc.run()
