@@ -1,10 +1,13 @@
+import sys
 import os
 import io
 import itertools
 import logging
-import sys
+
+import helper
 
 from riff import RIFF
+from bmp import BMP
 
 # Configurate logger
 root = logging.getLogger()
@@ -23,7 +26,10 @@ class HMSC:
     self.current_offset = 0
     self.file_size = os.path.getsize(file_name)
     self.offsets = []
-    self.RIFF = RIFF(file=self.file)
+    self.finders = [RIFF(file=self.file), BMP(file=self.file)]
+
+  def log_callback(self, type, offset, size):
+    logging.debug("Found {0} at @{1}, {2}".format(type, hex(offset).upper(), helper.humn_size(size)))
 
   def run(self):
     logging.debug("Running file scanner...")
@@ -41,7 +47,8 @@ class HMSC:
       numread = self.file.readinto(self.buffer)
       if numread == self.buffer_size:
         self.current_offset = read_bytes
-        self.offsets += self.RIFF.scan(self.buffer, self.current_offset, self.buffer_size)
+        for finder in self.finders:
+          self.offsets += finder.scan(self.buffer, self.current_offset, self.buffer_size, self.log_callback)
       else:
         logging.error("Error reading from file")
         break
@@ -49,7 +56,7 @@ class HMSC:
       read_bytes += self.buffer_size
 
     if read_bytes == self.file_size:
-      logging.debug("The file is completely scanned")
+      logging.debug("The file is completely scanned... Preparing for compress")
     else:
       logging.error("An error occurred while scanning (file not completely scanned)")
 
