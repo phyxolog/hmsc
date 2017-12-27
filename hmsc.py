@@ -28,7 +28,7 @@ class HMSC:
   def run(self):
     logging.debug("Running file scanner...")
     read_bytes = 0
-    if self.file_size <= self.buffer_size:
+    if self.file_size < self.buffer_size:
       self.buffer_size = self.file_size
 
     self.buffer = bytearray(self.buffer_size)
@@ -41,7 +41,7 @@ class HMSC:
       numread = self.file.readinto(self.buffer)
       if numread == self.buffer_size:
         self.current_offset = read_bytes
-        self.offsets += self.RIFF.scan(self.buffer, self.current_offset)
+        self.offsets += self.RIFF.scan(self.buffer, self.current_offset, self.buffer_size)
       else:
         logging.error("Error reading from file")
         break
