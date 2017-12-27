@@ -1,5 +1,6 @@
 import logging
 import struct
+import types
 
 class RIFF:
   def __init__(self, file=None):
@@ -12,14 +13,14 @@ class RIFF:
 
     while index != -1:
       offset = current_offset + index
-      offsets.append(offset)
+      
       self.file.seek(offset)
       self.file.readinto(buffer)
-      # logging.debug("Found RIFF WAVE at @{0}".format(hex(offset)))
-      riff, size, fformat = struct.unpack('<4sI4s', buffer)
-      if "".join(map(chr, riff)) == "RIFF":
-        print(current_offset)
-      # print("Riff: %s, Chunk Size: %i, format: %s" % ("".join(map(chr, riff)), size, fformat))      
+      if list(buffer[0:4]) == [0x52, 0x49, 0x46, 0x46] and list(buffer[8:12]) == [0x57, 0x41, 0x56, 0x45]:
+        # offsets.append({""})
+        riff, size, fformat = struct.unpack('<4sI4s', buffer)
+        logging.debug("Found RIFF WAVE at @{0}, {1} bytes".format(hex(offset), size))
+
       index = data.find(b"R", index + 1)
     
     self.file.seek(current_offset + buffer_size)
