@@ -18,7 +18,7 @@ class Scanner:
     self.scanners = []
 
     # Init scanners
-    scanner_scripts = glob.glob("plugins/*.py")
+    scanner_scripts = glob.glob("scanners/*.py")
     for script in scanner_scripts:
       module_name = os.path.basename(script).split(".")[0].upper()
       module = imp.load_source(module_name, script)
@@ -28,7 +28,6 @@ class Scanner:
     logging.debug("Found {0} at @{1}, {2}".format(type, hex(offset).upper(), helper.humn_size(size)))
 
   def run(self):
-    logging.debug("Running file scanner...")
     read_bytes = 0
     if self.file_size < self.buffer_size:
       self.buffer_size = self.file_size
