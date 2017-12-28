@@ -4,6 +4,7 @@ import io
 import itertools
 import logging
 import glob
+import imp
 
 import helper
 
@@ -14,7 +15,14 @@ class Scanner:
     self.current_offset = 0
     self.file_size = os.path.getsize(file_name)
     self.offsets = []
-    # self.scanners = [RIFF(file=self.file), BMP(file=self.file)]
+    self.scanners = []
+
+    # Init scanners
+    scanner_scripts = glob.glob("plugins/*.py")
+    for script in scanner_scripts:
+      module_name = os.path.basename(script).split(".")[0].upper()
+      module = imp.load_source(module_name, script)
+      self.scanners.append(getattr(module, module_name)(file=self.file))
 
   def log_callback(self, type, offset, size):
     logging.debug("Found {0} at @{1}, {2}".format(type, hex(offset).upper(), helper.humn_size(size)))
