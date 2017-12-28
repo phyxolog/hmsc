@@ -63,5 +63,5 @@ class HMSC:
 print("HMSC [Hyper Media Streams Compressor] v0.0.1 pre-alpha")
 print("by phyxolog (https://github.com/phyxolog)\n")
 
-hmsc = HMSC(file_name="music.data")
+hmsc = HMSC(file_name="media.data")
 hmsc.run()
