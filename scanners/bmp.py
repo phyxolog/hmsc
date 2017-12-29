@@ -4,12 +4,13 @@ import ftypes
 import helper
 
 class BMP:
-  def __init__(self, file=None):
+  def __init__(self, file=None, callback=None):
     self.file = file
     self.type = ftypes.BITMAP
     self.utype = self.type.upper()
+    self.callback = callback
 
-  def scan(self, data, current_offset=0, buffer_size=0, callback=None):
+  def scan(self, data, current_offset=0, buffer_size=0):
     index = data.find(b"B")
     buffer = bytearray(9)
     offsets = []
@@ -22,8 +23,8 @@ class BMP:
       if list(buffer[0:2]) == [0x42, 0x4D] and list(buffer[5:9]) == [0x00, 0x00, 0x00, 0x00]:
         size, = struct.unpack('i', buffer[2:6])
         offsets.append({"type": self.type, offset: offset, size: size})
-        if callback != None:
-          callback(self.utype, offset, size)
+        if self.callback != None:
+          self.callback(self.utype, offset, size)
 
       index = data.find(b"B", index + 1)
     

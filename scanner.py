@@ -22,7 +22,7 @@ class Scanner:
     for script in scanner_scripts:
       module_name = os.path.basename(script).split(".")[0].upper()
       module = imp.load_source(module_name, script)
-      self.scanners.append(getattr(module, module_name)(file=self.file))
+      self.scanners.append(getattr(module, module_name)(file=self.file, callback=self.log_callback))
 
   def log_callback(self, type, offset, size):
     logging.debug("Found {0} at @{1}, {2}".format(type, hex(offset).upper(), helper.humn_size(size)))
@@ -43,7 +43,7 @@ class Scanner:
       if numread == self.buffer_size:
         self.current_offset = read_bytes
         for finder in self.scanners:
-          self.offsets += finder.scan(self.buffer, self.current_offset, self.buffer_size, self.log_callback)
+          self.offsets += finder.scan(self.buffer, self.current_offset, self.buffer_size)
       else:
         logging.error("Error reading from file")
         break

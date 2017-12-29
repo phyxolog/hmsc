@@ -4,12 +4,13 @@ import ftypes
 import helper
 
 class RIFF_WAVE:
-  def __init__(self, file=None):
+  def __init__(self, file=None, callback=None):
     self.file = file
     self.type = ftypes.RIFF_WAVE
     self.utype = self.type.upper()
+    self.callback = callback
 
-  def scan(self, data, current_offset=0, buffer_size=0, callback=None):
+  def scan(self, data, current_offset=0, buffer_size=0):
     index = data.find(b"R")
     buffer = bytearray(12)
     offsets = []
@@ -22,8 +23,8 @@ class RIFF_WAVE:
       if list(buffer[0:4]) == [0x52, 0x49, 0x46, 0x46] and list(buffer[8:12]) == [0x57, 0x41, 0x56, 0x45]:
         riff, size, fformat = struct.unpack('<4sI4s', buffer)
         offsets.append({"type": self.type, offset: offset, size: size})
-        if callback != None:
-          callback(self.utype, offset, size)
+        if self.callback != None:
+          self.callback(self.utype, offset, size)
 
       index = data.find(b"R", index + 1)
     
