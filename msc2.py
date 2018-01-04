@@ -8,7 +8,6 @@ import argparse
 import scanner
 import compressor
 import extractor
-import insertor
 import ftypes
 
 # Configurate logger
