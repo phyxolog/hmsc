@@ -25,7 +25,7 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser(description=description)
   parser.add_argument("--option", dest="option", action="store", choices=["c", "s", "e"], required=True, help="c - compress, s - scan, e - extract")
   parser.add_argument("file", metavar="file", type=str, help="path for file to processing")
-  parser.add_argument("--extract-dir", dest="extract_dir", action="store", help="")
+  parser.add_argument("--extract-dir", dest="extract_dir", action="store")
   args = parser.parse_args()
 
   logging.info("Running scanner...")
