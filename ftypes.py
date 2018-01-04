@@ -1,4 +1,4 @@
-RIFF_WAVE = "riff_wave"
+RIFF_WAVE = "riff wave"
 BITMAP = "bitmap"
 
 EXT = {}

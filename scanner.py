@@ -6,6 +6,7 @@ import logging
 import glob
 import imp
 
+import ftypes
 import helper
 
 class Scanner:
@@ -25,7 +26,7 @@ class Scanner:
       self.scanners.append(getattr(module, module_name)(file=self.file, callback=self.__log_callback))
 
   def __log_callback(self, type, offset, size):
-    logging.debug("Found {0} at {1}, {2}".format(type, hex(offset).upper(), helper.humn_size(size)))
+    logging.debug("Found {0} @ {1} ({2})".format(type, helper.to_h(offset), helper.humn_size(size)))
 
   def run(self):
     read_bytes = 0
@@ -51,10 +52,10 @@ class Scanner:
       read_bytes += self.buffer_size
 
     if read_bytes == self.file_size:
-      logging.debug("The file is completely scanned")
+      logging.info("The file is completely scanned")
       return self.offsets
     else:
-      logging.error("An error occurred while scanning (file not completely scanned)")
+      logging.critical("An error occurred while scanning (file not completely scanned)")
       return None
 
     self.file.close()

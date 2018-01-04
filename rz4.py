@@ -16,7 +16,7 @@ root.setLevel(logging.DEBUG)
 
 ch = logging.StreamHandler(sys.stdout)
 ch.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s [%(levelname)s] --> %(message)s")
+formatter = logging.Formatter("[%(levelname)s]\t --> %(message)s")
 ch.setFormatter(formatter)
 root.addHandler(ch)
 
@@ -28,6 +28,7 @@ if __name__ == "__main__":
   parser.add_argument("--extract-dir", dest="extract_dir", action="store")
   args = parser.parse_args()
 
+  print("{0}\n".format(description))
   logging.info("Running scanner...")
 
   scanner = scanner.Scanner(file_name=args.file)

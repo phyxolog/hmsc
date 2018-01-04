@@ -22,10 +22,11 @@ class Extractor:
       os.makedirs(self.extract_dir)
 
   def __gen_file_name(self, i, result):
-    return ".".join([os.path.join(self.extract_dir, str(i).zfill(10)), ftypes.type_to_ext(result["type"])])    
+    file_name = "{0}-{1}".format(helper.to_h(result["offset"]), helper.to_h(result["size"]))
+    return ".".join([os.path.join(self.extract_dir, file_name), ftypes.type_to_ext(result["type"])])    
 
   def __extract(self, offset, size, type, out_file_name):
-    logging.debug("Extracting {0} to {1}, {2}".format(type.upper(), out_file_name, helper.humn_size(size)))
+    logging.debug("Extracting {0} to {1}".format(type.upper(), out_file_name))
 
     read_bytes = 0
     buffer_size = 131072 # 128kB
