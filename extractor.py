@@ -12,19 +12,19 @@ class Extractor:
     self.file_size = os.path.getsize(file_name)
     self.extract_dir = extract_dir
     self.results = results
-    self.__create_extract_dir__()
+    self.__create_extract_dir()
 
-  def __create_extract_dir__(self):
+  def __create_extract_dir(self):
     if self.extract_dir == None:
       self.extract_dir = "extract_data"
 
     if not os.path.exists(self.extract_dir):
       os.makedirs(self.extract_dir)
 
-  def __gen_file_name__(self, i, result):
+  def __gen_file_name(self, i, result):
     return ".".join([os.path.join(self.extract_dir, str(i).zfill(10)), ftypes.type_to_ext(result["type"])])    
 
-  def __extract__(self, offset, size, type, out_file_name):
+  def __extract(self, offset, size, type, out_file_name):
     logging.debug("Extracting {0} to {1}, {2}".format(type.upper(), out_file_name, helper.humn_size(size)))
 
     read_bytes = 0
@@ -54,6 +54,6 @@ class Extractor:
   def run(self):
     i = 1
     for result in self.results:
-      self.__extract__(result["offset"], result["size"], result["type"], self.__gen_file_name__(i, result))
+      self.__extract(result["offset"], result["size"], result["type"], self.__gen_file_name(i, result))
       i += 1
     self.file.close()
