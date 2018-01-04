@@ -1,4 +1,6 @@
 *.wav
 *.bmp
 *.7z
+extract_data
+
 __pycache__
