@@ -1,4 +1,4 @@
-# Media Streams Compressor 2
+# Media Streams Compressor
 
 > Packer for multimedia data.
 
