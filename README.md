@@ -1,4 +1,4 @@
-# [Media Streams Compressor](https://github.com/phyxolog/msc2)
+# [rz4 - Multimedia Packer](https://github.com/phyxolog/rz4)
 
 > Packer for multimedia data.
 

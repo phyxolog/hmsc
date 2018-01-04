@@ -21,7 +21,7 @@ ch.setFormatter(formatter)
 root.addHandler(ch)
 
 if __name__ == "__main__":
-  description = "MSC2 [Media Streams Compressor 2] v0.0.1 pre-alpha (https://github.com/phyxolog)"
+  description = "rz4 [multimedia packer] v0.0.1 pre-alpha (https://github.com/phyxolog/rz4)"
   parser = argparse.ArgumentParser(description=description)
   parser.add_argument("--option", dest="option", action="store", choices=["c", "s", "e"], required=True, help="c - compress, s - scan, e - extract")
   parser.add_argument("file", metavar="file", type=str, help="path for file to processing")
