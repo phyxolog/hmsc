@@ -4,3 +4,4 @@
 extract_data
 __pycache__
 *.pyc
+.vscode
