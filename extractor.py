@@ -8,6 +8,7 @@ import ftypes
 
 class Extractor:
   def __init__(self, file_name, results, extract_dir):
+    self.file_name = file_name
     self.file = io.open(file_name, "rb")
     self.file_size = os.path.getsize(file_name)
     self.extract_dir = extract_dir
@@ -22,7 +23,7 @@ class Extractor:
       os.makedirs(self.extract_dir)
 
   def __gen_file_name(self, i, result):
-    file_name = "{0}-{1}".format(helper.to_h(result["offset"]), helper.to_h(result["size"]))
+    file_name = "{0}-{1}-{2}".format(helper.to_h(result["offset"]), helper.to_h(result["size"]), os.path.basename(self.file_name))
     return ".".join([os.path.join(self.extract_dir, file_name), ftypes.type_to_ext(result["type"])])    
 
   def __extract(self, offset, size, type, out_file_name):
